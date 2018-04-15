@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,8 +26,8 @@ public class NetworkUtils {
     public static String TOP_RATED_FILTER = "top_rated";
     private static String API_KEY_PARAM = "api_key";
     private static String SCHEMA = "http";
-    public static String VIDEO = "/videos";
-    public static String REWIEWS = "/reviews";
+    public static String VIDEO = "videos";
+    public static String REVIEWS = "reviews";
 
     /**
      * Builds the URL used to talk to the movie server using a filter. This filter is based
@@ -35,15 +36,22 @@ public class NetworkUtils {
      * @param extraPath The filter that will be queried for.
      * @return The URL to use to query the movie server.
      */
-    public static URL buildUrl(String extraPath) {
+    public static URL buildUrl(String extraPath, int type) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEMA)
                 .authority(MOVIES_BASE_URL)
                 .appendPath("3")
                 .appendPath("movie")
-                .appendPath(extraPath)
-                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .appendPath(extraPath);
+        if (type == 1) {
+            builder.appendPath(VIDEO);
+        }
+        if (type == 2) {
+            builder.appendPath(REVIEWS);
+        }
+        builder.appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
+        Log.d("urll", builder.toString());
         URL url = null;
         try {
             url = new URL(builder.toString());

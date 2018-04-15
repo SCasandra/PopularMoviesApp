@@ -17,4 +17,6 @@ public class Constants {
     public static final String VIDEO_KEY = "key";
     public static final String MOVIE_ID = "id";
     public static final String MOVIE = "movie";
+    public static final String REVIEW = "review";
+    public static String REVIEW_SIZE = "review_size";
 }

@@ -9,6 +9,7 @@
     <string-array name="filter_array">
         <item>most popular</item>
         <item>top rated</item>
+        <item>favorites</item>
     </string-array>
 
 </resources>

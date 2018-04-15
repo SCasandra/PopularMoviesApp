@@ -3,6 +3,7 @@ package com.example.android.popularmoviesapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class Movie implements Parcelable {
     private String overview;
     private int id;
     private String video_key;
-    private List<Review> review;
+    private List<Review> review = new ArrayList<>();
 
     protected Movie(Parcel in) {
         title = in.readString();
@@ -28,6 +29,7 @@ public class Movie implements Parcelable {
         overview = in.readString();
         id = in.readInt();
         video_key = in.readString();
+        in.readList(review, Review.class.getClassLoader());
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -129,6 +131,7 @@ public class Movie implements Parcelable {
         parcel.writeString(overview);
         parcel.writeInt(id);
         parcel.writeString(video_key);
+        parcel.writeList(review);
 
     }
 }

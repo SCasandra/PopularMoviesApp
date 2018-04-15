@@ -1,5 +1,7 @@
 package com.example.android.popularmoviesapp.utils;
 
+import android.util.Log;
+
 import com.example.android.popularmoviesapp.model.Movie;
 import com.example.android.popularmoviesapp.model.Review;
 
@@ -28,17 +30,18 @@ public final class MovieJsonUtils {
         List<Review> reviews = null;
 
         JSONObject baseJsonResponse = new JSONObject(reviewJsonStr);
-        JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
-        if (response.length() > 0) {
-            reviews = new ArrayList<>();
-            for (int i = 0; i < response.length(); i++) {
-                JSONObject result = response.getJSONObject(i);
-                author = result.getString(AUTHOR);
-                content = result.getString(CONTENT);
-                reviews.add(new Review(author, content));
+        if (baseJsonResponse.has(RESULTS)) {
+            JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
+            if (response.length() > 0) {
+                reviews = new ArrayList<>();
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject result = response.getJSONObject(i);
+                    author = result.getString(AUTHOR);
+                    content = result.getString(CONTENT);
+                    reviews.add(new Review(author, content));
+                }
             }
         }
-
         return reviews;
     }
 
