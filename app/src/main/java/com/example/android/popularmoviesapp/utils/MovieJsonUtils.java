@@ -1,8 +1,7 @@
 package com.example.android.popularmoviesapp.utils;
 
-import android.content.Context;
-
-import com.example.android.popularmoviesapp.Movie;
+import com.example.android.popularmoviesapp.model.Movie;
+import com.example.android.popularmoviesapp.model.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +16,54 @@ import java.util.List;
 
 public final class MovieJsonUtils {
 
-    public static List<Movie> getSimpleMovieStringsFromJson(Context context, String movieJsonStr)
+    public static List<Review> getMovieReviewKeyFromJson(String reviewJsonStr) throws JSONException {
+        if (reviewJsonStr.isEmpty())
+            return null;
+
+        final String RESULTS = "results";
+        final String CONTENT = "content";
+        final String AUTHOR = "author";
+        String author;
+        String content;
+        List<Review> reviews = null;
+
+        JSONObject baseJsonResponse = new JSONObject(reviewJsonStr);
+        JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
+        if (response.length() > 0) {
+            reviews = new ArrayList<>();
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject result = response.getJSONObject(i);
+                author = result.getString(AUTHOR);
+                content = result.getString(CONTENT);
+                reviews.add(new Review(author, content));
+            }
+        }
+
+        return reviews;
+    }
+
+    public static String getMovieVideoKeyFromJson(String videoJsonStr) throws JSONException {
+        if (videoJsonStr.isEmpty())
+            return null;
+
+        final String RESULTS = "results";
+        final String KEY = "key";
+        String videoKey = "";
+
+        JSONObject baseJsonResponse = new JSONObject(videoJsonStr);
+        if (baseJsonResponse.has(RESULTS)) {
+            JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
+            if (response.length() > 0) {
+                for (int i = 0; i < response.length(); i++) {
+                    JSONObject result = response.getJSONObject(i);
+                    videoKey = result.getString(KEY);
+                }
+            }
+        }
+        return videoKey;
+    }
+
+    public static List<Movie> getSimpleMovieListFromJson(String movieJsonStr)
             throws JSONException {
 
         if (movieJsonStr.isEmpty())
@@ -30,6 +76,7 @@ public final class MovieJsonUtils {
         final String POSTER = "poster_path";
         final String VOTE_AVERAGE = "vote_average";
         final String PLOT_SYNOPSIS = "overview";
+        final String ID = "id";
 
         /* Movie list to hold movies */
         List<Movie> movieData = null;
@@ -46,6 +93,7 @@ public final class MovieJsonUtils {
                 String poster = "";
                 String releaseDate = "";
                 String overview = "";
+                int id = 0;
 
                 if (result.has(TITLE)) {
                     title = result.getString(TITLE);
@@ -62,7 +110,10 @@ public final class MovieJsonUtils {
                 if (result.has(VOTE_AVERAGE)) {
                     voteAverage = result.getDouble(VOTE_AVERAGE);
                 }
-                movieData.add(new Movie(title, releaseDate, poster, voteAverage, overview));
+                if (result.has(ID)) {
+                    id = result.getInt(ID);
+                }
+                movieData.add(new Movie(title, releaseDate, poster, voteAverage, overview, id));
             }
 
         }

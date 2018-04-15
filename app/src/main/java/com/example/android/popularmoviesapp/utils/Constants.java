@@ -13,4 +13,8 @@ public class Constants {
     public static final String BASE_IMG_URL = "http://image.tmdb.org/t/p/";
     public static final String IMG_W500 = "w500";
     public static final String IMG_W780 = "w780";
+    public static final String ID = "id";
+    public static final String VIDEO_KEY = "key";
+    public static final String MOVIE_ID = "id";
+    public static final String MOVIE = "movie";
 }

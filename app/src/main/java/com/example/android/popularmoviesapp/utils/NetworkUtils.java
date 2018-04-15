@@ -25,21 +25,23 @@ public class NetworkUtils {
     public static String TOP_RATED_FILTER = "top_rated";
     private static String API_KEY_PARAM = "api_key";
     private static String SCHEMA = "http";
+    public static String VIDEO = "/videos";
+    public static String REWIEWS = "/reviews";
 
     /**
      * Builds the URL used to talk to the movie server using a filter. This filter is based
      * on the query capabilities of the movie provider that we are using.
      *
-     * @param filterQuery The filter that will be queried for.
+     * @param extraPath The filter that will be queried for.
      * @return The URL to use to query the movie server.
      */
-    public static URL buildUrl(String filterQuery) {
+    public static URL buildUrl(String extraPath) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEMA)
                 .authority(MOVIES_BASE_URL)
                 .appendPath("3")
                 .appendPath("movie")
-                .appendPath(filterQuery)
+                .appendPath(extraPath)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
         URL url = null;

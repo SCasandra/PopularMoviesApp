@@ -1,7 +1,6 @@
 package com.example.android.popularmoviesapp;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,14 +11,13 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.android.popularmoviesapp.interfaces.AsyncTaskCompleteListener;
+import com.example.android.popularmoviesapp.model.Movie;
+import com.example.android.popularmoviesapp.tasks.FetchMoviesTask;
 import com.example.android.popularmoviesapp.utils.Constants;
-import com.example.android.popularmoviesapp.utils.MovieJsonUtils;
 import com.example.android.popularmoviesapp.utils.NetworkUtils;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,12 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private GridView mGridView;
     private String filter_type = NetworkUtils.TOP_RATED_FILTER;
     private ImageAdapter imageAdapter;
+    private List<Movie> movies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        movies = new ArrayList<>();
         mErrorMessageDisplay = findViewById(R.id.errorTextView);
         mLoadingIndicator = findViewById(R.id.progressBar);
         mGridView = findViewById(R.id.gridView);
@@ -65,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     filter_type = NetworkUtils.POPULAR_FILTER;
                 }
                 if (NetworkUtils.isOnline(getApplicationContext())) {
-                    FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-                    fetchMoviesTask.execute();
+                    new FetchMoviesTask(getApplicationContext(), new FetchMyDataTaskCompleteListener()).execute(filter_type);
                 } else {
                     showErrorMessage(getString(R.string.no_net_error));
                 }
@@ -82,11 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDetailActivity(Movie m) {
         Intent i = new Intent(this, DetailActivity.class);
-        i.putExtra(Constants.TITLE, m.getTitle());
-        i.putExtra(Constants.OVERVIEW, m.getOverview());
-        i.putExtra(Constants.POSTER, m.getPoster());
-        i.putExtra(Constants.RELEASE_DATE, m.getReleaseDate());
-        i.putExtra(Constants.VOTE_AVG, m.getVoteAverage());
+        i.putExtra(Constants.MOVIE, m);
         startActivity(i);
     }
 
@@ -120,40 +115,24 @@ public class MainActivity extends AppCompatActivity {
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-    private class FetchMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
+    public class FetchMyDataTaskCompleteListener implements AsyncTaskCompleteListener<List<Movie>> {
 
         @Override
-        protected void onPostExecute(List<Movie> movieData) {
-
+        public void onTaskComplete(List<Movie> movieData) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (movieData != null) {
                 showMovieDataView();
                 imageAdapter.setMovieData(movieData);
+                movies = movieData;
             } else {
                 showErrorMessage(getString(R.string.no_data_error));
             }
         }
 
         @Override
-        protected List<Movie> doInBackground(Void... voids) {
-            URL movieRequestUrl = NetworkUtils.buildUrl(filter_type);
-
-            try {
-                String jsonMovieResponse = NetworkUtils
-                        .getResponseFromHttpUrl(movieRequestUrl);
-                List<Movie> simpleJsonMovieDataList = MovieJsonUtils
-                        .getSimpleMovieStringsFromJson(MainActivity.this, jsonMovieResponse);
-
-                return simpleJsonMovieDataList;
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
+        public void onTaskPreExecute() {
+            mLoadingIndicator.setVisibility(View.VISIBLE);
         }
     }
+
 }
