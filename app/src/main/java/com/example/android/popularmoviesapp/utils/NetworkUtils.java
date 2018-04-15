@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
  */
 
 public class NetworkUtils {
-    private static String API_KEY = "795dde9bc6bc707b185f7d8312e53383";
+    private static String API_KEY = "";
     private static String MOVIES_BASE_URL = "api.themoviedb.org";
     public static String POPULAR_FILTER = "popular";
     public static String TOP_RATED_FILTER = "top_rated";
