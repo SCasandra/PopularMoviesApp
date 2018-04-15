@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PopularMoviesApp</string>
+    <string name="no_data_error">No data found!</string>
+    <string name="release_date">Release Date: </string>
+    <string name="no_net_error">No Internet Connection!</string>
+
+    <string-array name="filter_array">
+        <item>most popular</item>
+        <item>top rated</item>
+    </string-array>
+
+</resources>
