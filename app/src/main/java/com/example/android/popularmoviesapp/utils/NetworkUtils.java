@@ -37,8 +37,6 @@ public class NetworkUtils {
      * @return The URL to use to query the movie server.
      */
     public static URL buildUrl(String extraPath, int type) {
-        if (extraPath.equals(FAVORITES_FILTER))
-            extraPath = TOP_RATED_FILTER;
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEMA)
                 .authority(MOVIES_BASE_URL)

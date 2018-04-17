@@ -72,12 +72,11 @@ public class DetailActivity extends AppCompatActivity {
             if (findMovieByTitle(movie.getTitle()) == null) {
                 ContentValues values = new ContentValues();
                 values.put(MovieContract.MovieEntry.COLUMN_TITILE, movie.getTitle());
-                getContentResolver().insert(MovieContract.CONTENT_URI, values);
+                getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
             }
         } else {
             deleteMovieWithTitle(movie.getTitle());
         }
-
     }
 
     public Movie findMovieByTitle(String title) {
@@ -86,7 +85,7 @@ public class DetailActivity extends AppCompatActivity {
 
         String selection = "title = \"" + title + "\"";
 
-        Cursor cursor = getContentResolver().query(MovieContract.CONTENT_URI,
+        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                 projection, selection, null,
                 null);
 
@@ -100,10 +99,9 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void deleteMovieWithTitle(String title) {
-        Uri uri = MovieContract.CONTENT_URI;
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
         uri = uri.buildUpon().appendPath(title).build();
-        getContentResolver().delete(uri,
-                null, null);
+        getContentResolver().delete(uri, null, null);
     }
 
 }

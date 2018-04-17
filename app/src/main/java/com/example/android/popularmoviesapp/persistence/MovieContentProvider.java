@@ -18,8 +18,8 @@ import static com.example.android.popularmoviesapp.persistence.MovieContract.Mov
 
 public class MovieContentProvider extends ContentProvider {
 
-    private static final int MOVIE = 12;
-    private static final int MOVIE_WITH_TITLE = 13;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_WITH_TITLE = 101;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private MovieDbHelper helper;
 
@@ -33,7 +33,7 @@ public class MovieContentProvider extends ContentProvider {
     public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.MovieEntry.TABLE_NAME, MOVIE);
-        uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.MovieEntry.TABLE_NAME + "/#", MOVIE_WITH_TITLE);
+        uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.MovieEntry.TABLE_NAME + "/*", MOVIE_WITH_TITLE);
         return uriMatcher;
     }
 

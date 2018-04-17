@@ -25,7 +25,7 @@
 
         <provider
             android:name="com.example.android.popularmoviesapp.persistence.MovieContentProvider"
-            android:authorities="com.example.android.popularmoviesapp.persistence.MovieContentProvider"
+            android:authorities="com.example.android.popularmoviesapp"
             android:exported="false" />
     </application>
 

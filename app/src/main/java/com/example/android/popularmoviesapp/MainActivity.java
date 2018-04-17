@@ -1,7 +1,6 @@
 package com.example.android.popularmoviesapp;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,12 +13,10 @@ import android.widget.TextView;
 
 import com.example.android.popularmoviesapp.interfaces.AsyncTaskCompleteListener;
 import com.example.android.popularmoviesapp.model.Movie;
-import com.example.android.popularmoviesapp.persistence.MovieContract;
 import com.example.android.popularmoviesapp.tasks.FetchMoviesTask;
 import com.example.android.popularmoviesapp.utils.Constants;
 import com.example.android.popularmoviesapp.utils.NetworkUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,14 +25,12 @@ public class MainActivity extends AppCompatActivity {
     private GridView mGridView;
     private String filter_type = NetworkUtils.TOP_RATED_FILTER;
     private ImageAdapter imageAdapter;
-    private List<Movie> movies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        movies = new ArrayList<>();
         mErrorMessageDisplay = findViewById(R.id.errorTextView);
         mLoadingIndicator = findViewById(R.id.progressBar);
         mGridView = findViewById(R.id.gridView);
@@ -71,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         filter_type = NetworkUtils.TOP_RATED_FILTER;
                 }
-
-                if (NetworkUtils.isOnline(getApplicationContext())) {
-                    new FetchMoviesTask(getApplicationContext(), new FetchMyDataTaskCompleteListener()).execute(filter_type);
-                } else {
-                    showErrorMessage(getString(R.string.no_net_error));
+                if(filter_type!= NetworkUtils.FAVORITES_FILTER) {
+                    if (NetworkUtils.isOnline(getApplicationContext())) {
+                        new FetchMoviesTask(getApplicationContext(), new FetchMyDataTaskCompleteListener()).execute(filter_type);
+                    } else {
+                        showErrorMessage(getString(R.string.no_net_error));
+                    }
                 }
             }
 
@@ -129,29 +125,7 @@ public class MainActivity extends AppCompatActivity {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (movieData != null) {
                 showMovieDataView();
-                if (filter_type.equals(NetworkUtils.FAVORITES_FILTER)) {
-                    for (int i = 0; i < movieData.size(); i++) {
-                        String[] projection = {MovieContract.MovieEntry._ID,
-                                MovieContract.MovieEntry.COLUMN_TITILE};
-
-                        String selection = "title = \"" + movieData.get(i).getTitle() + "\"";
-
-                        Cursor cursor = getContentResolver().query(MovieContract.CONTENT_URI,
-                                projection, selection, null,
-                                null);
-
-
-                        if (cursor.moveToFirst()) {
-                            cursor.moveToFirst();
-                            movies.add(movieData.get(i));
-                        }
-                    }
-                    imageAdapter.setMovieData(movies);
-                }
-                else
-                {
-                    imageAdapter.setMovieData(movieData);
-                }
+                imageAdapter.setMovieData(movieData);
             } else {
                 showErrorMessage(getString(R.string.no_data_error));
             }
