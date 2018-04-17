@@ -71,10 +71,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void showTrailer(String videoKey) {
-        Intent i = new Intent(this, TrailerActivity.class);
-        i.putExtra(Constants.TITLE, getTitle());
-        i.putExtra(Constants.VIDEO_KEY, videoKey);
-        startActivity(i);
+        String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_BASE_URL+videoKey)));
     }
 
     public void showReviews(View view) {
