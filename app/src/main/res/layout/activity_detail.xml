@@ -43,6 +43,7 @@
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
             <ImageButton
+                android:id="@+id/image_btn"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:onClick="setAsFavorite"

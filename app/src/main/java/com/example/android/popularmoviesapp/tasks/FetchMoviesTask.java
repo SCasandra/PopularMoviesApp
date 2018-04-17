@@ -45,7 +45,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected List<Movie> doInBackground(String... filters) {
-        URL movieRequestUrl = NetworkUtils.buildUrl(filters[0],0);
+        URL movieRequestUrl = NetworkUtils.buildUrl(filters[0], 0);
 
         try {
             String jsonMovieResponse = NetworkUtils

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +23,7 @@ public class NetworkUtils {
     private static String MOVIES_BASE_URL = "api.themoviedb.org";
     public static String POPULAR_FILTER = "popular";
     public static String TOP_RATED_FILTER = "top_rated";
+    public static String FAVORITES_FILTER = "fav";
     private static String API_KEY_PARAM = "api_key";
     private static String SCHEMA = "http";
     public static String VIDEO = "videos";
@@ -37,6 +37,8 @@ public class NetworkUtils {
      * @return The URL to use to query the movie server.
      */
     public static URL buildUrl(String extraPath, int type) {
+        if (extraPath.equals(FAVORITES_FILTER))
+            extraPath = TOP_RATED_FILTER;
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEMA)
                 .authority(MOVIES_BASE_URL)
@@ -51,7 +53,6 @@ public class NetworkUtils {
         }
         builder.appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
-        Log.d("urll", builder.toString());
         URL url = null;
         try {
             url = new URL(builder.toString());
