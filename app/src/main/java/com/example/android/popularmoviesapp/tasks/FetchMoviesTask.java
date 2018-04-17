@@ -45,7 +45,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected List<Movie> doInBackground(String... filters) {
-        URL movieRequestUrl = NetworkUtils.buildUrl(filters[0], 0);
+        URL movieRequestUrl = NetworkUtils.buildUrl(new String[]{filters[0]});
 
         try {
             String jsonMovieResponse = NetworkUtils
@@ -54,27 +54,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
                     .getSimpleMovieListFromJson(jsonMovieResponse);
             if (simpleJsonMovieDataList == null)
                 return null;
-            for (int i = 0; i < simpleJsonMovieDataList.size(); i++) {
-                new FetchMovieInfoTask(context, new FetchMyDataTaskCompleteListener()).execute(simpleJsonMovieDataList.get(i));
-            }
             return simpleJsonMovieDataList;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             return movies;
-        }
-    }
-
-    private class FetchMyDataTaskCompleteListener implements AsyncTaskCompleteListener<Movie> {
-
-        @Override
-        public void onTaskComplete(Movie result) {
-            movies.add(result);
-
-        }
-
-        @Override
-        public void onTaskPreExecute() {
-
         }
     }
 }

@@ -89,8 +89,7 @@ public class MovieContentProvider extends ContentProvider {
         long id = 0;
         switch (match) {
             case MOVIE:
-                db.insert(TABLE_NAME, null, contentValues);
-
+                id = db.insert(TABLE_NAME, null, contentValues);
                 break;
             default:
         }

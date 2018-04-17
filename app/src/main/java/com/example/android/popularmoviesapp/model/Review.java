@@ -10,15 +10,26 @@ import android.os.Parcelable;
 public class Review implements Parcelable {
     private String content;
     private String author;
+    private int movieId;
 
-    public Review(String author, String content) {
+    public Review(String author, String content, int movieId) {
         this.author = author;
         this.content = content;
+        this.movieId = movieId;
     }
 
     protected Review(Parcel in) {
         author = in.readString();
         content = in.readString();
+        movieId = in.readInt();
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public static final Creator<Review> CREATOR = new Creator<Review>() {
@@ -58,5 +69,6 @@ public class Review implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(author);
         parcel.writeString(content);
+        parcel.writeInt(movieId);
     }
 }

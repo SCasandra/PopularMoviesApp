@@ -3,7 +3,6 @@ package com.example.android.popularmoviesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.example.android.popularmoviesapp.utils.Constants;

@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">PopularMoviesApp</string>
-    <string name="no_data_error">No data found!</string>
+    <string name="no_data_error"><b>No Transactions</b>. We don\'t see any record from your history.</string>
     <string name="release_date">Release Date: </string>
-    <string name="no_net_error">No Internet Connection!</string>
+    <string name="no_net_error"><b>No Internet Connection</b>. Looks like connection has lost. Please try again later.</string>
     <string name="reviews_btn_txt">Read reviews</string>
     <string name="trailer_btn_txt">Play trailer</string>
 
     <string-array name="filter_array">
-        <item>most popular</item>
         <item>top rated</item>
+        <item>most popular</item>
         <item>favorites</item>
     </string-array>
 

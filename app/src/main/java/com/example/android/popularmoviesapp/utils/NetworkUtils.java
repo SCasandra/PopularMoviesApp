@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +27,6 @@ public class NetworkUtils {
     public static String FAVORITES_FILTER = "fav";
     private static String API_KEY_PARAM = "api_key";
     private static String SCHEMA = "http";
-    public static String VIDEO = "videos";
-    public static String REVIEWS = "reviews";
 
     /**
      * Builds the URL used to talk to the movie server using a filter. This filter is based
@@ -36,21 +35,18 @@ public class NetworkUtils {
      * @param extraPath The filter that will be queried for.
      * @return The URL to use to query the movie server.
      */
-    public static URL buildUrl(String extraPath, int type) {
+    public static URL buildUrl(String[] extraPath) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(SCHEMA)
                 .authority(MOVIES_BASE_URL)
                 .appendPath("3")
-                .appendPath("movie")
-                .appendPath(extraPath);
-        if (type == 1) {
-            builder.appendPath(VIDEO);
-        }
-        if (type == 2) {
-            builder.appendPath(REVIEWS);
-        }
+                .appendPath("movie");
+        for (int i = 0; i < extraPath.length; i++)
+            builder.appendPath(extraPath[i]);
+
         builder.appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
+        Log.d("regv", builder.toString());
         URL url = null;
         try {
             url = new URL(builder.toString());
@@ -59,6 +55,7 @@ public class NetworkUtils {
         }
         return url;
     }
+
 
     /**
      * This method returns the entire result from the HTTP response.

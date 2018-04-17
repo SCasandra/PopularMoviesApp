@@ -1,4 +1,4 @@
-package com.example.android.popularmoviesapp;
+package com.example.android.popularmoviesapp.adapters;
 
 
 import android.content.Context;
@@ -7,37 +7,37 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.example.android.popularmoviesapp.model.Movie;
-import com.example.android.popularmoviesapp.utils.Constants;
+import com.example.android.popularmoviesapp.model.Video;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageAdapter extends BaseAdapter {
+public class VideoAdapter extends BaseAdapter {
 
+    private static final Object YOUTUBE_URL = "http://img.youtube.com/vi/";
     private Context mContext;
-    private List<Movie> movies;
+    private List<Video> videos;
 
-    public ImageAdapter(Context c) {
+    public VideoAdapter(Context c) {
         mContext = c;
-        movies = new ArrayList<>();
+        videos = new ArrayList<>();
     }
 
 
-    public void setMovieData(List<Movie> movies) {
-        this.movies = movies;
+    public void setVideoData(List<Video> videos) {
+        this.videos = videos;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return movies.size();
+        return videos.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return movies.get(i);
+        return videos.get(i);
     }
 
     @Override
@@ -49,18 +49,14 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ImageView imageView;
         if (view == null) {
-            // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            //  imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            //  imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) view;
         }
 
-        // imageView.setImageResource(R.drawable.success);
-        Movie m = (Movie) getItem(i);
-        Picasso.with(mContext).load(Constants.BASE_IMG_URL + Constants.IMG_W500 + m.getPoster()).into(imageView);
+        Video v = (Video) getItem(i);
+        Picasso.with(mContext).load(YOUTUBE_URL + v.getKey() + "/0.jpg").into(imageView);
         return imageView;
     }
 }

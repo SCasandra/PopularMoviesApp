@@ -1,9 +1,8 @@
 package com.example.android.popularmoviesapp.utils;
 
-import android.util.Log;
-
 import com.example.android.popularmoviesapp.model.Movie;
 import com.example.android.popularmoviesapp.model.Review;
+import com.example.android.popularmoviesapp.model.Video;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,13 +22,17 @@ public final class MovieJsonUtils {
             return null;
 
         final String RESULTS = "results";
+        final String ID = "id";
         final String CONTENT = "content";
         final String AUTHOR = "author";
         String author;
         String content;
+        int id = 0;
         List<Review> reviews = null;
-
         JSONObject baseJsonResponse = new JSONObject(reviewJsonStr);
+        if (baseJsonResponse.has(ID)) {
+            id = baseJsonResponse.getInt(ID);
+        }
         if (baseJsonResponse.has(RESULTS)) {
             JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
             if (response.length() > 0) {
@@ -38,32 +41,38 @@ public final class MovieJsonUtils {
                     JSONObject result = response.getJSONObject(i);
                     author = result.getString(AUTHOR);
                     content = result.getString(CONTENT);
-                    reviews.add(new Review(author, content));
+                    reviews.add(new Review(author, content, id));
                 }
             }
         }
         return reviews;
     }
 
-    public static String getMovieVideoKeyFromJson(String videoJsonStr) throws JSONException {
+    public static List<Video> getMovieVideoKeyFromJson(String videoJsonStr) throws JSONException {
         if (videoJsonStr.isEmpty())
             return null;
 
         final String RESULTS = "results";
+        final String ID = "id";
         final String KEY = "key";
-        String videoKey = "";
+        List<Video> videos = null;
+        int id = 0;
 
         JSONObject baseJsonResponse = new JSONObject(videoJsonStr);
+        if (baseJsonResponse.has(ID)) {
+            id = baseJsonResponse.getInt(ID);
+        }
         if (baseJsonResponse.has(RESULTS)) {
             JSONArray response = baseJsonResponse.getJSONArray(RESULTS);
             if (response.length() > 0) {
+                videos = new ArrayList<>();
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject result = response.getJSONObject(i);
-                    videoKey = result.getString(KEY);
+                    videos.add(new Video(id, result.getString(KEY)));
                 }
             }
         }
-        return videoKey;
+        return videos;
     }
 
     public static List<Movie> getSimpleMovieListFromJson(String movieJsonStr)
